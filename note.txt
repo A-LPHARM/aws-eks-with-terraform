@@ -1,0 +1,65 @@
+first 
+input 
+  terraform init
+  terraform validate
+  terraform plan
+  terraform apply or terraform apply -auto-approve
+
+  or  
+  
+  Step 4: Override the variable with different cluster name when you execute terraform apply command
+
+      terraform apply -var="cluster_name=dev"
+
+        (OR)
+
+      terraform apply -var="cluster_name=staging"
+
+        (OR)
+        
+      terraform apply -var="cluster_name=production"
+
+
+aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
+
+aws eks --region $(terraform output -raw region) update-kubeconfig --name eks-henry-v3-pi
+
+
+
+
+=======================================================================================================================================================
+
+To build your cluster using aws eks 
+
+install the plugin using 
+
+- on windows powershell admin
+
+choco install -y eksctl 
+
+Then build your clusters 
+
+eksctl create cluster --name=svc-eks-app --node-type=t2.medium --nodes=3 --region=us-east-1 --zones=us-east-1a,us-east-1b,us-east-1d --node-ami-family=AmazonLinux2
+
+
+then you can build your pods with this examples 
+
+and mointor the pods using this metrics
+
+
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+kubectl get deployment metrics-server -n kube-system
+
+Kubernetes Dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+finally
+
+to delete the cluster
+that was built with aws eks
+
+eksctl delete cluster --name svc-eks-app --region us-east-1
